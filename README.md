@@ -1,30 +1,23 @@
-# STRONGER Fitness App — v3
+# STRONGER v5
 
-Mobile-first guided workout prototype built for iPhone and GitHub Pages.
+Premium iPhone-first fitness app prototype with improved UI/UX, richer workout visuals, a polished orange/black theme, real component-based screens, and the user's updated Ali weekly plan.
 
-## Ali Plan weekly schedule
-
-- Monday — Back + Biceps
-- Tuesday — Chest + Triceps + 30 min treadmill cardio
-- Wednesday — Shoulders + Abs
-- Thursday — Legs + 25 min treadmill cardio
-- Friday — Light Cardio (duration flexible)
-- Saturday — Rest
-- Sunday — Cycling (duration flexible)
-- Rest between every strength-training set: 90 seconds
-
-## Run locally
-
-From this folder:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then open `http://localhost:8000` on your phone or desktop browser.
+## Features
+- Home screen with today's workout
+- Athlete plans screen
+- Ali weekly plan (Mon-Sun)
+- Workout day screens with exercise-specific photos
+- Exercise detail screens with muscles, how-to, and tips
+- Live workout screen
+- 90-second rest timer with +15 / pause / skip
+- Treadmill cardio and cycling screens
+- Workout complete screen
+- Progress screen
+- PWA-ready static site for GitHub Pages
 
 ## GitHub Pages
+Upload the contents of this folder to the root of your repo, then enable:
 
-Upload every file and folder in this directory to the root of a GitHub repository. Then open **Settings → Pages**, choose **Deploy from a branch**, select `main` and `/root`, and save.
+Settings -> Pages -> Deploy from a branch -> main -> /root
 
-The app is static and needs no build command.
+No build step is needed.

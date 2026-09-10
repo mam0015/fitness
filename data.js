@@ -1,240 +1,78 @@
 export const REST_SECONDS = 90;
 
-const ex = (id, name, sets, reps, target, secondary, tips, howTo, art) => ({
-  id, name, sets, reps, target, secondary, tips, howTo, art, rest: REST_SECONDS
+const IMG_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
+const img = (sourceId, frame = 0) => `${IMG_BASE}${sourceId}/${frame}.jpg`;
+
+const fallbackByGroup = {
+  back: './assets/generated/back_hero.jpg',
+  biceps: './assets/generated/back_card.jpg',
+  chest: './assets/generated/plan_arnold.jpg',
+  triceps: './assets/generated/plan_chris.jpg',
+  shoulders: './assets/generated/plan_chris.jpg',
+  abs: './assets/generated/progress.jpg',
+  legs: './assets/generated/plan_ronnie.jpg',
+  cardio: './assets/generated/cardio.jpg',
+  cycling: './assets/generated/cycling.jpg'
+};
+
+const ex = ({id,name,sets,reps,target,secondary,tips,howTo,sourceId,group='back',equipment='Gym'}) => ({
+  id,name,sets,reps,target,secondary,tips,howTo,sourceId,group,equipment,rest:REST_SECONDS,
+  image: img(sourceId,0), image2: img(sourceId,1), fallback: fallbackByGroup[group] || fallbackByGroup.back
 });
 
 export const exercises = {
-  latPulldown: ex('latPulldown','Lat Pulldown',4,10,'Lats','Biceps, rear delts',[
-    'Keep your chest tall and ribs controlled.',
-    'Pull your elbows down toward your sides instead of yanking with your hands.',
-    'Pause briefly near your upper chest, then return under control.'
-  ],'Grip the bar slightly wider than shoulder width. Sit tall with thighs locked under the pad. Lean back only a little, drive your elbows down, bring the bar toward the upper chest, then slowly let the arms straighten without shrugging.','pulldown'),
-  seatedCableRow: ex('seatedCableRow','Seated Cable Row',4,10,'Mid back & lats','Biceps, rear delts',[
-    'Keep your spine neutral instead of rocking back and forth.',
-    'Drive the elbows behind you and squeeze your shoulder blades together.',
-    'Let the shoulders reach forward slightly at the start without rounding hard.'
-  ],'Sit with knees softly bent and torso upright. Start with arms long. Pull the handle toward the lower ribs while keeping the chest lifted. Squeeze the back, then extend the arms slowly until you feel a stretch.','row'),
-  oneArmRow: ex('oneArmRow','One-Arm Dumbbell Row',3,12,'Lats','Upper back, biceps',[
-    'Keep hips and shoulders mostly square to the floor.',
-    'Pull the elbow toward your back pocket.',
-    'Avoid twisting your torso to finish the rep.'
-  ],'Brace one hand on a bench, keep your back flat, and let the dumbbell hang below the shoulder. Pull the elbow up and slightly back toward the hip, pause, then lower the dumbbell under control.','onearmrow'),
-  barbellCurl: ex('barbellCurl','Barbell Curl',4,10,'Biceps','Forearms',[
-    'Keep elbows close to your sides.',
-    'Do not swing your hips to start the rep.',
-    'Lower the bar slowly instead of dropping it.'
-  ],'Stand tall with the bar around hip height and palms facing forward. Keep the upper arms still, curl the bar toward the shoulders, squeeze the biceps, then lower until the elbows are almost straight.','curl'),
-  hammerCurl: ex('hammerCurl','Hammer Curl',3,12,'Biceps & brachialis','Forearms',[
-    'Keep a neutral thumb-up grip throughout.',
-    'Keep shoulders relaxed and elbows pinned near the torso.',
-    'Use a controlled range rather than rushing.'
-  ],'Hold dumbbells by your sides with palms facing inward. Curl one or both dumbbells upward while keeping the neutral grip, squeeze at the top, and lower slowly.','hammercurl'),
+  latPulldown: ex({id:'latPulldown',name:'Lat Pulldown',sets:4,reps:10,target:'Lats',secondary:'Biceps • Rear delts',sourceId:'Wide-Grip_Lat_Pulldown',group:'back',equipment:'Cable machine',tips:['Keep your chest tall and ribs controlled.','Drive your elbows down, not your hands.','Pause near the upper chest and return slowly.'],howTo:'Sit with your thighs secured under the pad. Grip the bar a little wider than shoulder width, lift your chest, then pull the bar toward your upper chest by driving your elbows down. Control the bar back to full arm length without shrugging.'}),
+  seatedCableRow: ex({id:'seatedCableRow',name:'Seated Cable Row',sets:4,reps:10,target:'Mid Back & Lats',secondary:'Biceps • Rear delts',sourceId:'Seated_Cable_Rows',group:'back',equipment:'Cable machine',tips:['Keep your spine neutral.','Pull the handle toward the lower ribs.','Squeeze the shoulder blades before returning.'],howTo:'Sit tall with knees slightly bent and arms long. Pull the handle into your lower ribs without rocking your torso. Squeeze your back, then extend the arms slowly until you feel a controlled stretch.'}),
+  oneArmRow: ex({id:'oneArmRow',name:'One-Arm Dumbbell Row',sets:3,reps:12,target:'Lats',secondary:'Upper back • Biceps',sourceId:'One-Arm_Dumbbell_Row',group:'back',equipment:'Dumbbell + bench',tips:['Keep hips and shoulders square.','Pull your elbow toward your back pocket.','Do not twist your torso to finish the rep.'],howTo:'Brace one hand and knee on a bench. Let the dumbbell hang directly below your shoulder, then pull your elbow up and back toward your hip. Pause, squeeze your lat, and lower the dumbbell under control.'}),
+  barbellCurl: ex({id:'barbellCurl',name:'Barbell Curl',sets:4,reps:10,target:'Biceps',secondary:'Forearms',sourceId:'Barbell_Curl',group:'biceps',equipment:'Barbell',tips:['Keep elbows close to your sides.','No hip swing.','Lower the bar slowly.'],howTo:'Stand tall with palms facing forward. Keep your upper arms still while curling the bar toward your shoulders. Squeeze at the top, then lower until the elbows are nearly straight.'}),
+  hammerCurl: ex({id:'hammerCurl',name:'Hammer Curl',sets:3,reps:12,target:'Biceps & Brachialis',secondary:'Forearms',sourceId:'Hammer_Curls',group:'biceps',equipment:'Dumbbells',tips:['Keep a neutral thumb-up grip.','Keep shoulders relaxed.','Do not rush the lowering phase.'],howTo:'Hold dumbbells by your sides with palms facing inward. Curl the dumbbells while keeping the neutral grip and the upper arms still. Squeeze, then lower slowly.'}),
 
-  inclineDbPress: ex('inclineDbPress','Incline Dumbbell Press',4,10,'Upper chest','Front delts, triceps',[
-    'Use a moderate bench incline instead of setting it too steep.',
-    'Keep shoulder blades gently pulled back and down.',
-    'Lower the dumbbells with control to a comfortable depth.'
-  ],'Lie on an incline bench with dumbbells above the upper chest. Lower them beside the chest while keeping forearms close to vertical. Press up and slightly inward without smashing the dumbbells together.','press'),
-  machineChestPress: ex('machineChestPress','Machine Chest Press',4,10,'Chest','Triceps, front delts',[
-    'Set the seat so the handles line up around mid-chest.',
-    'Keep your back and shoulders supported.',
-    'Do not lock the elbows aggressively at the top.'
-  ],'Sit with your upper back against the pad and grip the handles. Press forward until the arms are nearly straight, keep the chest engaged, then return slowly until you feel a comfortable stretch.','machinepress'),
-  cableFly: ex('cableFly','Cable Fly',3,12,'Chest','Front delts',[
-    'Keep a soft bend in your elbows.',
-    'Think about bringing your upper arms together rather than your hands.',
-    'Stop before the shoulders roll forward.'
-  ],'Stand between the cables with one foot slightly forward. Start with arms open and elbows softly bent. Sweep the arms forward in a wide arc, squeeze the chest, then return under control.','fly'),
-  ropePushdown: ex('ropePushdown','Rope Triceps Pushdown',4,12,'Triceps','Forearms',[
-    'Pin your elbows near your ribs.',
-    'Separate the rope slightly at the bottom.',
-    'Do not turn it into a full-body movement.'
-  ],'Stand tall facing the cable. Start with elbows bent and upper arms still. Push the rope down until the elbows straighten, spread the rope slightly, squeeze the triceps, then return slowly.','pushdown'),
-  overheadTriceps: ex('overheadTriceps','Overhead Triceps Extension',3,12,'Triceps long head','Shoulders, core',[
-    'Keep ribs down so your lower back does not over-arch.',
-    'Point elbows mostly forward.',
-    'Use a weight you can control through the stretch.'
-  ],'Hold a rope or dumbbell overhead. Bend the elbows to lower the resistance behind your head while keeping the upper arms stable. Extend the elbows to return to the top and squeeze the triceps.','overheadtriceps'),
+  inclineDbPress: ex({id:'inclineDbPress',name:'Incline Dumbbell Press',sets:4,reps:10,target:'Upper Chest',secondary:'Front delts • Triceps',sourceId:'Incline_Dumbbell_Press',group:'chest',equipment:'Dumbbells + incline bench',tips:['Use a moderate incline.','Keep shoulder blades gently back and down.','Lower to a comfortable depth.'],howTo:'Lie on an incline bench with dumbbells above the upper chest. Lower them beside the chest while keeping forearms close to vertical, then press up and slightly inward with control.'}),
+  machineChestPress: ex({id:'machineChestPress',name:'Machine Chest Press',sets:4,reps:10,target:'Chest',secondary:'Triceps • Front delts',sourceId:'Smith_Machine_Bench_Press',group:'chest',equipment:'Chest press machine',tips:['Line handles up around mid-chest.','Keep back and shoulders supported.','Do not slam into elbow lockout.'],howTo:'Set the seat so the handles sit around mid-chest. Press forward while keeping your upper back supported, stop just short of a hard lockout, then return slowly into a comfortable chest stretch.'}),
+  cableFly: ex({id:'cableFly',name:'Cable Fly',sets:3,reps:12,target:'Chest',secondary:'Front delts',sourceId:'Cable_Crossover',group:'chest',equipment:'Cable machine',tips:['Keep a soft bend in your elbows.','Think about bringing upper arms together.','Stop before shoulders roll forward.'],howTo:'Stand between the cables with one foot slightly forward. Sweep your arms forward in a wide arc, squeeze the chest, then return under control while keeping the same elbow angle.'}),
+  ropePushdown: ex({id:'ropePushdown',name:'Rope Triceps Pushdown',sets:4,reps:12,target:'Triceps',secondary:'Forearms',sourceId:'Triceps_Pushdown_-_Rope_Attachment',group:'triceps',equipment:'Cable + rope',tips:['Pin elbows near your ribs.','Separate the rope at the bottom.','Keep your torso quiet.'],howTo:'Face the cable with elbows bent and upper arms fixed. Push the rope down until the elbows straighten, separate the rope slightly, squeeze the triceps, then return slowly.'}),
+  overheadTriceps: ex({id:'overheadTriceps',name:'Overhead Triceps Extension',sets:3,reps:12,target:'Triceps Long Head',secondary:'Shoulders • Core',sourceId:'Cable_Rope_Overhead_Triceps_Extension',group:'triceps',equipment:'Cable + rope',tips:['Keep ribs down.','Keep elbows mostly forward.','Control the stretched position.'],howTo:'Face away from the cable with the rope behind your head. Keep the upper arms stable as you extend the elbows, squeeze the triceps, then bend the elbows slowly to return to the stretch.'}),
 
-  seatedShoulderPress: ex('seatedShoulderPress','Seated Dumbbell Shoulder Press',4,10,'Shoulders','Triceps, upper chest',[
-    'Keep your back supported and ribs stacked.',
-    'Press slightly inward as the dumbbells rise.',
-    'Lower until your elbows are around shoulder level or a pain-free depth.'
-  ],'Sit against an upright bench with dumbbells around shoulder height. Brace your core, press the dumbbells overhead, then lower smoothly back to the starting position.','shoulderpress'),
-  lateralRaise: ex('lateralRaise','Dumbbell Lateral Raise',4,12,'Side delts','Upper traps',[
-    'Lead with the elbows instead of flicking the wrists.',
-    'Use light enough weight to avoid swinging.',
-    'Raise to about shoulder height.'
-  ],'Stand tall with dumbbells by your sides. With elbows softly bent, raise the arms out to the sides until around shoulder height, pause briefly, then lower slowly.','lateralraise'),
-  reversePecDeck: ex('reversePecDeck','Reverse Pec Deck',3,12,'Rear delts','Upper back',[
-    'Keep your chest against the pad.',
-    'Move through the shoulders instead of jerking the torso.',
-    'Control the return phase.'
-  ],'Sit facing the machine pad and grip the handles. With a small elbow bend, open the arms until they are roughly in line with the torso. Squeeze the rear shoulders, then return slowly.','reversefly'),
-  cableCrunch: ex('cableCrunch','Cable Crunch',4,15,'Abs','Hip flexors',[
-    'Curl your ribs toward your pelvis rather than just bending at the hips.',
-    'Keep the rope beside your head, not pulling with your arms.',
-    'Exhale as you crunch.'
-  ],'Kneel facing the cable with the rope beside your temples. Keep your hips fairly still, curl your upper body down by contracting the abs, pause, then return under control.','crunch'),
-  hangingKneeRaise: ex('hangingKneeRaise','Hanging Knee Raise',3,12,'Lower abs','Hip flexors, grip',[
-    'Start each rep from a controlled hang.',
-    'Tuck your pelvis as the knees rise.',
-    'Avoid swinging.'
-  ],'Hang from a pull-up bar with shoulders active. Bring the knees toward the chest while curling the pelvis upward, pause, then lower the legs slowly back to a still hang.','kneeraise'),
+  seatedShoulderPress: ex({id:'seatedShoulderPress',name:'Seated Dumbbell Shoulder Press',sets:4,reps:10,target:'Shoulders',secondary:'Triceps • Upper chest',sourceId:'Dumbbell_Shoulder_Press',group:'shoulders',equipment:'Dumbbells + bench',tips:['Brace your ribs and core.','Press slightly inward.','Lower to a pain-free depth.'],howTo:'Sit against an upright bench with dumbbells around shoulder height. Brace your core, press overhead without over-arching, then lower smoothly until the elbows reach a comfortable position.'}),
+  lateralRaise: ex({id:'lateralRaise',name:'Dumbbell Lateral Raise',sets:4,reps:12,target:'Side Delts',secondary:'Upper traps',sourceId:'Side_Lateral_Raise',group:'shoulders',equipment:'Dumbbells',tips:['Lead with the elbows.','Use a light enough weight to avoid swinging.','Stop around shoulder height.'],howTo:'Stand tall with dumbbells by your sides. Raise the arms out to the sides with a soft elbow bend until around shoulder height, pause briefly, then lower slowly.'}),
+  reversePecDeck: ex({id:'reversePecDeck',name:'Reverse Pec Deck',sets:3,reps:12,target:'Rear Delts',secondary:'Upper back',sourceId:'Reverse_Machine_Flyes',group:'shoulders',equipment:'Reverse fly machine',tips:['Keep chest against the pad.','Move through the shoulders.','Control the return.'],howTo:'Sit facing the pad with your chest supported. Open the arms until they are roughly in line with your torso, squeeze the rear shoulders, then return slowly.'}),
+  cableCrunch: ex({id:'cableCrunch',name:'Cable Crunch',sets:4,reps:15,target:'Abs',secondary:'Hip flexors',sourceId:'Cable_Crunch',group:'abs',equipment:'Cable + rope',tips:['Curl ribs toward pelvis.','Do not pull with your arms.','Exhale hard as you crunch.'],howTo:'Kneel facing the cable with the rope beside your temples. Keep the hips fairly still and curl your ribs down toward your pelvis. Pause, squeeze the abs, then return under control.'}),
+  hangingKneeRaise: ex({id:'hangingKneeRaise',name:'Hanging Knee Raise',sets:3,reps:12,target:'Lower Abs',secondary:'Hip flexors • Grip',sourceId:'Hanging_Leg_Raise',group:'abs',equipment:'Pull-up bar',tips:['Start from a still hang.','Tuck your pelvis as knees rise.','Avoid swinging.'],howTo:'Hang from the bar with your shoulders active. Bring your knees upward while curling the pelvis toward your ribs, pause, then lower slowly back to a still hang.'}),
 
-  squat: ex('squat','Back Squat',4,8,'Quads & glutes','Hamstrings, core',[
-    'Brace your torso before each rep.',
-    'Keep knees tracking in the same direction as your toes.',
-    'Use the deepest range you can control with a neutral spine.'
-  ],'Set the bar securely across the upper back, stand with feet around shoulder width, brace, sit down and between the hips, then drive the floor away to stand while keeping the torso controlled.','squat'),
-  legPress: ex('legPress','Leg Press',4,10,'Quads & glutes','Hamstrings',[
-    'Keep your lower back supported by the pad.',
-    'Do not let the knees collapse inward.',
-    'Avoid locking the knees hard at the top.'
-  ],'Place your feet securely on the platform. Lower the sled until your knees reach a comfortable bend while your hips stay supported, then press through the feet to return.','legpress'),
-  rdl: ex('rdl','Romanian Deadlift',4,10,'Hamstrings & glutes','Back, grip',[
-    'Push your hips backward instead of squatting straight down.',
-    'Keep the weight close to your legs.',
-    'Stop when you feel a strong hamstring stretch and can still keep your back neutral.'
-  ],'Stand with the bar or dumbbells at thigh level. Soften the knees, brace, push the hips back while the weight slides close to the legs, then squeeze the glutes to stand tall.','hinge'),
-  legExtension: ex('legExtension','Leg Extension',3,12,'Quads','Hip flexors',[
-    'Align your knee joint with the machine pivot.',
-    'Lift smoothly instead of kicking the pad.',
-    'Pause briefly near the top.'
-  ],'Sit with your back supported and the pad above your ankles. Extend the knees until the legs are nearly straight, squeeze the quads, then lower under control.','legextension'),
-  legCurl: ex('legCurl','Leg Curl',3,12,'Hamstrings','Calves',[
-    'Keep hips pressed into the pad.',
-    'Curl smoothly without lifting your torso.',
-    'Control the return to the stretched position.'
-  ],'Set the machine so the knee lines up with the pivot. Curl the pad toward your body by bending the knees, squeeze the hamstrings, then return slowly.','legcurl'),
-  calfRaise: ex('calfRaise','Standing Calf Raise',4,15,'Calves','Foot stabilisers',[
-    'Use a full controlled stretch at the bottom.',
-    'Rise as high as you comfortably can onto the balls of your feet.',
-    'Avoid bouncing.'
-  ],'Stand with the balls of your feet supported and heels free to move. Lower the heels under control, press through the forefoot to rise high, pause, then lower slowly.','calfraise'),
+  squat: ex({id:'squat',name:'Back Squat',sets:4,reps:8,target:'Quads & Glutes',secondary:'Hamstrings • Core',sourceId:'Barbell_Squat',group:'legs',equipment:'Barbell + rack',tips:['Brace before each rep.','Keep knees tracking with toes.','Use the deepest range you can control.'],howTo:'Set the bar securely across your upper back. Brace, sit down and between the hips while keeping the feet planted, then drive through the floor to stand tall.'}),
+  legPress: ex({id:'legPress',name:'Leg Press',sets:4,reps:10,target:'Quads & Glutes',secondary:'Hamstrings',sourceId:'Leg_Press',group:'legs',equipment:'Leg press machine',tips:['Keep lower back supported.','Do not let knees collapse inward.','Avoid hard knee lockout.'],howTo:'Place your feet securely on the platform. Lower the sled until your hips remain supported and your knees reach a comfortable bend, then press through the whole foot to return.'}),
+  rdl: ex({id:'rdl',name:'Romanian Deadlift',sets:4,reps:10,target:'Hamstrings & Glutes',secondary:'Back • Grip',sourceId:'Romanian_Deadlift_from_Deficit',group:'legs',equipment:'Barbell or dumbbells',tips:['Push hips backward.','Keep the weight close to your legs.','Stop when you feel a strong hamstring stretch.'],howTo:'Stand with the weight at thigh level. Soften the knees, brace, then push the hips back while keeping the weight close to your legs. Squeeze the glutes to return to standing.'}),
+  legExtension: ex({id:'legExtension',name:'Leg Extension',sets:3,reps:12,target:'Quads',secondary:'Hip flexors',sourceId:'Leg_Extensions',group:'legs',equipment:'Leg extension machine',tips:['Align knee with machine pivot.','Lift smoothly.','Pause briefly at the top.'],howTo:'Sit with your back supported and the pad above your ankles. Extend the knees until the legs are nearly straight, squeeze the quads, then lower under control.'}),
+  legCurl: ex({id:'legCurl',name:'Leg Curl',sets:3,reps:12,target:'Hamstrings',secondary:'Calves',sourceId:'Lying_Leg_Curls',group:'legs',equipment:'Leg curl machine',tips:['Keep hips pressed into the pad.','Curl smoothly.','Control the return to the stretch.'],howTo:'Set the machine so your knee lines up with the pivot. Curl the pad toward your body, squeeze the hamstrings, then return slowly.'}),
+  calfRaise: ex({id:'calfRaise',name:'Standing Calf Raise',sets:4,reps:15,target:'Calves',secondary:'Foot stabilisers',sourceId:'Standing_Calf_Raises',group:'legs',equipment:'Calf raise machine',tips:['Use a full controlled stretch.','Rise as high as comfortable.','Do not bounce.'],howTo:'Stand with the balls of your feet supported and your heels free. Lower under control, press through the forefoot to rise high, pause, then lower slowly.'}),
 
-  benchPress: ex('benchPress','Barbell Bench Press',4,8,'Chest','Triceps, front delts',[
-    'Keep shoulder blades supported against the bench.',
-    'Touch the bar around the lower-to-mid chest with control.',
-    'Keep wrists stacked over the forearms.'
-  ],'Lie on the bench with a stable foot position. Unrack the bar, lower it toward the chest while keeping the upper back tight, then press upward until the arms are nearly straight.','bench'),
-  pullUp: ex('pullUp','Pull-Up',4,8,'Lats','Biceps, upper back',[
-    'Start from an active shoulder position.',
-    'Drive elbows down as you lift.',
-    'Avoid kicking or swinging unless intentionally doing a different variation.'
-  ],'Hang from the bar with hands slightly wider than shoulder width. Brace, pull the chest toward the bar by driving the elbows down, then lower under control to the starting position.','pullup'),
-  deadlift: ex('deadlift','Deadlift',3,6,'Posterior chain','Back, quads, grip',[
-    'Brace before the bar leaves the floor.',
-    'Keep the bar close to the body.',
-    'Stand tall by extending the hips, not by leaning backward.'
-  ],'Stand with the bar over mid-foot. Hinge down, grip the bar, brace, push through the floor and extend hips and knees together. Lower by hinging first, then bending the knees as the bar passes them.','deadlift'),
-  dbInclineCurl: ex('dbInclineCurl','Incline Dumbbell Curl',3,10,'Biceps','Forearms',[
-    'Let the arms hang naturally behind the torso.',
-    'Keep the shoulder still while the elbow bends.',
-    'Use a slow lowering phase.'
-  ],'Sit back on an incline bench with arms hanging straight down. Curl the dumbbells without moving the upper arms forward, squeeze the biceps, then lower slowly.','inclinecurl'),
-  skullCrusher: ex('skullCrusher','EZ-Bar Skull Crusher',3,10,'Triceps','Forearms',[
-    'Keep upper arms angled slightly back instead of flaring widely.',
-    'Lower toward the forehead or just behind the head using a comfortable path.',
-    'Do not let the elbows drift excessively.'
-  ],'Lie on a bench holding an EZ-bar above the chest. Bend the elbows to lower the bar toward the forehead or slightly behind the head, then extend the elbows to return.','skullcrusher'),
-  walkingLunge: ex('walkingLunge','Walking Lunge',3,12,'Quads & glutes','Hamstrings, core',[
-    'Take a long enough step to stay balanced.',
-    'Keep the front knee tracking over the foot.',
-    'Push through the whole front foot to rise.'
-  ],'Step forward and lower until both knees are comfortably bent. Drive through the front foot to stand and bring the rear leg forward into the next step.','lunge'),
-  facePull: ex('facePull','Cable Face Pull',3,15,'Rear delts & upper back','External rotators',[
-    'Pull toward eye or forehead level.',
-    'Finish with hands apart and elbows high.',
-    'Keep your ribs down.'
-  ],'Set a rope attachment around face height. Pull the rope toward your face while spreading the hands and rotating the shoulders outward, then return slowly.','facepull')
+  benchPress: ex({id:'benchPress',name:'Barbell Bench Press',sets:4,reps:8,target:'Chest',secondary:'Triceps • Front delts',sourceId:'Barbell_Bench_Press_-_Medium_Grip',group:'chest',equipment:'Barbell + bench',tips:['Keep shoulder blades supported.','Touch around lower-to-mid chest.','Keep wrists stacked over forearms.'],howTo:'Lie on the bench with stable feet and upper back. Lower the bar under control toward the chest, then press upward while keeping the shoulders supported.'}),
+  pullUp: ex({id:'pullUp',name:'Pull-Up',sets:4,reps:8,target:'Lats',secondary:'Biceps • Upper back',sourceId:'Pullups',group:'back',equipment:'Pull-up bar',tips:['Start from an active shoulder position.','Drive elbows down.','Avoid swinging.'],howTo:'Hang from the bar with a comfortable overhand grip. Brace, pull your chest toward the bar by driving the elbows down, then lower under control.'}),
+  deadlift: ex({id:'deadlift',name:'Deadlift',sets:3,reps:6,target:'Posterior Chain',secondary:'Back • Quads • Grip',sourceId:'Barbell_Deadlift',group:'legs',equipment:'Barbell',tips:['Brace before the bar moves.','Keep the bar close.','Stand tall without leaning backward.'],howTo:'Stand with the bar over mid-foot. Hinge down, grip and brace, then push through the floor while extending hips and knees together. Lower under control.'}),
+  dbInclineCurl: ex({id:'dbInclineCurl',name:'Incline Dumbbell Curl',sets:3,reps:10,target:'Biceps',secondary:'Forearms',sourceId:'Alternate_Incline_Dumbbell_Curl',group:'biceps',equipment:'Dumbbells + incline bench',tips:['Let arms hang naturally.','Keep shoulders still.','Lower slowly.'],howTo:'Sit back on an incline bench with the arms hanging down. Curl without letting the upper arms drift forward, squeeze the biceps, then lower slowly.'}),
+  skullCrusher: ex({id:'skullCrusher',name:'EZ-Bar Skull Crusher',sets:3,reps:10,target:'Triceps',secondary:'Forearms',sourceId:'Lying_Triceps_Press',group:'triceps',equipment:'EZ-bar + bench',tips:['Keep upper arms stable.','Use a comfortable lowering path.','Do not flare elbows excessively.'],howTo:'Lie on a bench holding the EZ-bar above the chest. Bend the elbows to lower toward the forehead or slightly behind the head, then extend the elbows to return.'}),
+  walkingLunge: ex({id:'walkingLunge',name:'Walking Lunge',sets:3,reps:12,target:'Quads & Glutes',secondary:'Hamstrings • Core',sourceId:'Walking_Barbell_Lunge',group:'legs',equipment:'Bodyweight or dumbbells',tips:['Take a balanced step.','Track the front knee over the foot.','Drive through the whole front foot.'],howTo:'Step forward and lower until both knees are comfortably bent. Drive through the front foot to stand and continue into the next step.'}),
+  facePull: ex({id:'facePull',name:'Cable Face Pull',sets:3,reps:15,target:'Rear Delts & Upper Back',secondary:'External rotators',sourceId:'Face_Pull',group:'shoulders',equipment:'Cable + rope',tips:['Pull toward eye level.','Finish with hands apart.','Keep ribs down.'],howTo:'Set the rope around face height. Pull toward your face while spreading the hands and rotating the shoulders outward, then return slowly.'})
 };
 
-const d = (name, subtitle, exerciseIds, cardio = null) => ({
-  name,
-  subtitle,
-  type: 'workout',
-  cardio,
-  exercises: exerciseIds.map(id => exercises[id])
-});
-const restDay = (name='Rest', subtitle='Saturday') => ({ name, subtitle, type: 'rest', exercises: [] });
-const cardioDay = (name, subtitle, cardio) => ({ name, subtitle, type: 'cardio', cardio, exercises: [] });
-const cyclingDay = (name, subtitle) => ({ name, subtitle, type: 'cycling', cardio: { mode: 'Cycling', minutes: null, intensity: 'Steady / comfortable pace' }, exercises: [] });
+const d=(name,subtitle,exerciseIds,cardio=null)=>({name,subtitle,type:'workout',cardio,exercises:exerciseIds.map(id=>exercises[id])});
+const restDay=(name='Rest Day',subtitle='Saturday')=>({name,subtitle,type:'rest',exercises:[]});
+const cardioDay=(name,subtitle,cardio)=>({name,subtitle,type:'cardio',cardio,exercises:[]});
+const cyclingDay=(name,subtitle)=>({name,subtitle,type:'cycling',cardio:{mode:'Cycling',minutes:null,intensity:'Steady / comfortable pace'},exercises:[]});
 
-export const plans = [
-  {
-    id: 'ali',
-    name: 'Ali Plan',
-    short: '4 strength days + cardio + cycling',
-    description: 'A full Monday-to-Sunday routine with four lifting days, treadmill cardio on Tuesday and Thursday, light cardio Friday, recovery Saturday, and cycling Sunday.',
-    tag: 'Balanced & Powerful',
-    accent: 'ALI',
-    official: true,
-    days: [
-      d('Back + Biceps','Monday',[ 'latPulldown','seatedCableRow','oneArmRow','barbellCurl','hammerCurl' ]),
-      d('Chest + Triceps','Tuesday',[ 'inclineDbPress','machineChestPress','cableFly','ropePushdown','overheadTriceps' ], { mode: 'Treadmill', minutes: 30, intensity: 'Cardio after weights' }),
-      d('Shoulders + Abs','Wednesday',[ 'seatedShoulderPress','lateralRaise','reversePecDeck','cableCrunch','hangingKneeRaise' ]),
-      d('Legs','Thursday',[ 'squat','legPress','rdl','legExtension','legCurl','calfRaise' ], { mode: 'Treadmill', minutes: 25, intensity: 'Cardio after weights' }),
-      cardioDay('Light Cardio','Friday', { mode: 'Treadmill / light cardio', minutes: null, intensity: 'Easy recovery pace' }),
-      restDay('Rest','Saturday'),
-      cyclingDay('Cycling','Sunday')
-    ]
-  },
-  {
-    id: 'arnold',
-    name: 'Arnold-Inspired',
-    short: 'Chest + back / shoulders + arms / legs',
-    description: 'A high-volume classic bodybuilding split inspired by the famous Arnold double-split body-part structure.',
-    tag: 'Classic Physique',
-    accent: 'A',
-    official: false,
-    days: [
-      d('Chest + Back','Day 1',[ 'benchPress','inclineDbPress','cableFly','pullUp','seatedCableRow' ]),
-      d('Shoulders + Arms','Day 2',[ 'seatedShoulderPress','lateralRaise','barbellCurl','dbInclineCurl','skullCrusher' ]),
-      d('Legs + Abs','Day 3',[ 'squat','rdl','walkingLunge','calfRaise','cableCrunch' ]),
-      d('Chest + Back','Day 4',[ 'benchPress','inclineDbPress','pullUp','oneArmRow','facePull' ]),
-      d('Shoulders + Arms','Day 5',[ 'seatedShoulderPress','reversePecDeck','barbellCurl','hammerCurl','ropePushdown' ]),
-      d('Legs + Abs','Day 6',[ 'legPress','rdl','legExtension','legCurl','hangingKneeRaise' ]),
-      restDay('Rest')
-    ]
-  },
-  {
-    id: 'ronnie',
-    name: 'Ronnie-Inspired',
-    short: 'Heavy compounds + bodybuilding volume',
-    description: 'A mass-focused routine inspired by Ronnie Coleman’s famously heavy, high-effort training style. Not an official program.',
-    tag: 'Mass & Strength',
-    accent: 'R',
-    official: false,
-    days: [
-      d('Back + Biceps','Day 1',[ 'deadlift','latPulldown','seatedCableRow','oneArmRow','barbellCurl' ]),
-      d('Legs','Day 2',[ 'squat','legPress','rdl','legExtension','calfRaise' ]),
-      d('Chest + Triceps','Day 3',[ 'benchPress','inclineDbPress','machineChestPress','ropePushdown','skullCrusher' ]),
-      restDay('Rest'),
-      d('Back + Shoulders','Day 5',[ 'pullUp','seatedCableRow','seatedShoulderPress','lateralRaise','facePull' ]),
-      d('Legs + Arms','Day 6',[ 'legPress','walkingLunge','legCurl','barbellCurl','overheadTriceps' ]),
-      restDay('Rest')
-    ]
-  },
-  {
-    id: 'chris',
-    name: 'Chris-Inspired',
-    short: 'Classic physique PPL structure',
-    description: 'A modern push/pull/legs routine inspired by classic-physique style training. Not an official Chris Bumstead program.',
-    tag: 'Lean & Athletic',
-    accent: 'C',
-    official: false,
-    days: [
-      d('Push','Day 1',[ 'inclineDbPress','machineChestPress','seatedShoulderPress','lateralRaise','ropePushdown' ]),
-      d('Pull','Day 2',[ 'latPulldown','seatedCableRow','oneArmRow','facePull','barbellCurl' ]),
-      d('Legs','Day 3',[ 'squat','legPress','rdl','legCurl','calfRaise' ]),
-      restDay('Rest'),
-      d('Upper','Day 5',[ 'inclineDbPress','pullUp','lateralRaise','seatedCableRow','hammerCurl','ropePushdown' ]),
-      d('Lower + Abs','Day 6',[ 'legPress','rdl','walkingLunge','legExtension','cableCrunch' ]),
-      restDay('Rest')
-    ]
-  }
+export const plans=[
+ {id:'ali',name:'Ali Plan',short:'Strength • Cardio • Cycling',description:'Four focused strength days with planned treadmill work, a light cardio day, recovery, and Sunday cycling.',tag:'Balanced & Effective',portrait:'./assets/generated/plan_ali.jpg',hero:'./assets/generated/hero_ali.jpg',days:[
+  d('Back + Biceps','Monday',['latPulldown','seatedCableRow','oneArmRow','barbellCurl','hammerCurl']),
+  d('Chest + Triceps','Tuesday',['inclineDbPress','machineChestPress','cableFly','ropePushdown','overheadTriceps'],{mode:'Treadmill',minutes:30,intensity:'Moderate cardio after weights'}),
+  d('Shoulders + Abs','Wednesday',['seatedShoulderPress','lateralRaise','reversePecDeck','cableCrunch','hangingKneeRaise']),
+  d('Legs','Thursday',['squat','legPress','rdl','legExtension','legCurl','calfRaise'],{mode:'Treadmill',minutes:25,intensity:'Moderate cardio after weights'}),
+  cardioDay('Light Cardio','Friday',{mode:'Light Cardio',minutes:null,intensity:'Easy recovery pace'}),
+  restDay('Rest Day','Saturday'),
+  cyclingDay('Cycling','Sunday')
+ ]},
+ {id:'arnold',name:'Arnold Inspired',short:'Classic Physique',description:'High-volume classic bodybuilding structure.',tag:'Timeless Aesthetics',portrait:'./assets/generated/plan_arnold.jpg',hero:'./assets/generated/plan_arnold.jpg',days:[d('Chest + Back','Day 1',['benchPress','inclineDbPress','cableFly','pullUp','seatedCableRow']),d('Shoulders + Arms','Day 2',['seatedShoulderPress','lateralRaise','barbellCurl','dbInclineCurl','skullCrusher']),d('Legs + Abs','Day 3',['squat','rdl','walkingLunge','calfRaise','cableCrunch']),restDay()]},
+ {id:'ronnie',name:'Ronnie Inspired',short:'Mass & Strength',description:'Heavy compounds with bodybuilding volume.',tag:'Mass Monster',portrait:'./assets/generated/plan_ronnie.jpg',hero:'./assets/generated/plan_ronnie.jpg',days:[d('Back + Biceps','Day 1',['deadlift','latPulldown','seatedCableRow','oneArmRow','barbellCurl']),d('Legs','Day 2',['squat','legPress','rdl','legExtension','calfRaise']),d('Chest + Triceps','Day 3',['benchPress','inclineDbPress','machineChestPress','ropePushdown','skullCrusher']),restDay()]},
+ {id:'chris',name:'Chris Inspired',short:'Modern Physique',description:'A balanced push/pull/legs inspired structure.',tag:'Aesthetic & Modern',portrait:'./assets/generated/plan_chris.jpg',hero:'./assets/generated/plan_chris.jpg',days:[d('Push','Day 1',['inclineDbPress','machineChestPress','seatedShoulderPress','lateralRaise','ropePushdown']),d('Pull','Day 2',['latPulldown','seatedCableRow','oneArmRow','facePull','barbellCurl']),d('Legs','Day 3',['squat','legPress','rdl','legCurl','calfRaise']),restDay()]}
 ];
 
-export const planById = id => plans.find(p => p.id === id) || plans[0];
+export const planById=id=>plans.find(p=>p.id===id)||plans[0];
