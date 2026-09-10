@@ -36,6 +36,8 @@ const totalSets = (day) => day?.exercises?.reduce((n, ex) => n + ex.sets, 0) || 
 const sessionMins = () => state.workoutStartedAt ? Math.max(1, Math.round((Date.now() - state.workoutStartedAt) / 60000)) : 0;
 const dayProgress = () => { const total = totalSets(currentDay()); return total ? Math.round((state.completedSets / total) * 100) : 0; };
 const fmt = (s) => { const n = Math.max(0, s || 0); const m = Math.floor(n / 60); const r = n % 60; return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`; };
+const localDateKey = (date = new Date()) => { const y = date.getFullYear(); const m = String(date.getMonth()+1).padStart(2,'0'); const d = String(date.getDate()).padStart(2,'0'); return `${y}-${m}-${d}`; };
+const dayKeyOffset = (offset) => { const d = new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+offset); return localDateKey(d); };
 const splitHow = (text='') => text.split(/\.\s+/).map(s => s.trim()).filter(Boolean).map(s => s.endsWith('.') ? s : s + '.').slice(0, 5);
 const imgTag = (ex, className='') => `<img class="${className} remote-image" src="${esc(ex.fallback)}" data-remote="${esc(ex.image)}" alt="${esc(ex.name)}"/>`;
 
@@ -123,7 +125,7 @@ function plansView() {
     <div class="plan-list">
       ${plans.map(p => `
         <button class="plan-card ${p.id==='ali'?'active':''}" data-plan="${esc(p.id)}">
-          <div class="thumb"><img src="${esc(p.portrait)}" alt="${esc(p.name)}"></div>
+          <div class="thumb"><img src="${esc(p.portrait)}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='./assets/generated/plan_${p.id === "ali" ? "ali" : p.id}.jpg';"></div>
           <div>
             <strong>${esc(p.name)}</strong>
             <small>${esc(p.short)}</small>
@@ -141,14 +143,13 @@ function planView() {
   return shell(`
     ${header({back:true})}
     <section class="hero-card panel">
-      <img src="${esc(p.hero)}" alt="${esc(p.name)}">
+      <img src="${esc(p.hero)}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='./assets/generated/plan_${p.id === "ali" ? "ali" : p.id}.jpg';">
       <div class="hero-copy">
         <div class="hero-chip">${p.id === 'ali' ? 'Your personal plan' : 'Inspired program'}</div>
         <h1>${esc(p.name)}</h1>
         <p>${esc(p.description)}</p>
       </div>
     </section>
-    <div class="pills"><span class="pill">Muscle build</span><span class="pill">Phone only</span><span class="pill orange">90 sec rest</span></div>
     <div class="section-title"><strong>Weekly schedule</strong><span>${p.days.length} days</span></div>
     <div class="schedule">
       ${p.days.map((d, i) => `
@@ -332,33 +333,51 @@ function completionView() {
 }
 
 function progressView() {
-  const workouts = state.history.length;
-  const totalSetsDone = state.history.reduce((n, x) => n + (x.sets || 0), 0);
-  const activeDays = new Set(state.history.map(x => x.date)).size;
-  const calories = workouts * 520 + 1800;
-  const heights = [42, 76, 58, 84, 52, 26, 64];
+  const history = Array.isArray(state.history) ? state.history : [];
+  const completedSessions = history.length;
+  const strengthSessions = history.filter(x => (x.sets || 0) > 0).length;
+  const totalSetsDone = history.reduce((n, x) => n + Number(x.sets || 0), 0);
+  const totalMinutes = history.reduce((n, x) => n + Number(x.duration || 0), 0);
+  const activeDays = new Set(history.map(x => x.date).filter(Boolean)).size;
+
+  const weekKeys = Array.from({length:7}, (_,i) => dayKeyOffset(i-6));
+  const weekLabels = weekKeys.map(k => {
+    const [y,m,d] = k.split('-').map(Number);
+    return new Date(y,m-1,d).toLocaleDateString(undefined,{weekday:'short'}).slice(0,1);
+  });
+  const weekMinutes = weekKeys.map(k => history.filter(x => x.date === k).reduce((n,x) => n + Number(x.duration || 0), 0));
+  const maxMinutes = Math.max(1, ...weekMinutes);
+  const heights = weekMinutes.map(v => v === 0 ? 6 : Math.max(14, Math.round((v / maxMinutes) * 94)));
+  const recent = history.slice(0,5);
+
   return shell(`
     ${header({back:false})}
     <section class="progress-header">
       <div class="eyebrow">Your progress</div>
-      <h1 style="margin-bottom:6px">Keep going.</h1>
-      <p class="lead">Small consistent sessions turn into real results.</p>
+      <h1 style="margin-bottom:6px">Your real data.</h1>
+      <p class="lead">Everything here comes from sessions you actually complete inside STRONGER.</p>
     </section>
     <div class="progress-cards">
-      <div class="metric"><span>Workouts</span><b>${workouts}</b><small>+20%</small></div>
-      <div class="metric"><span>Total Sets</span><b>${totalSetsDone}</b><small>+18%</small></div>
-      <div class="metric"><span>Calories (est.)</span><b>${calories.toLocaleString()}</b><small>+12%</small></div>
-      <div class="metric"><span>Active Days</span><b>${activeDays}</b><small>+9%</small></div>
+      <div class="metric"><span>Completed Sessions</span><b>${completedSessions}</b><small>${strengthSessions} strength workouts</small></div>
+      <div class="metric"><span>Total Sets</span><b>${totalSetsDone}</b><small>Completed sets only</small></div>
+      <div class="metric"><span>Training Time</span><b>${totalMinutes}</b><small>minutes logged</small></div>
+      <div class="metric"><span>Active Days</span><b>${activeDays}</b><small>days with activity</small></div>
     </div>
     <section class="chart">
-      <strong>Weekly activity</strong>
+      <strong>Last 7 days</strong>
       <div class="bars">
-        ${heights.map((h, i) => `<div class="bar-wrap"><div class="bar" style="height:${h}px"></div><span>${['M','T','W','T','F','S','S'][i]}</span></div>`).join('')}
+        ${heights.map((h, i) => `<div class="bar-wrap"><div class="bar" style="height:${h}px;opacity:${weekMinutes[i] ? 1 : .24}"></div><span>${weekLabels[i]}</span></div>`).join('')}
       </div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;color:#8f8f95;font-size:11px"><span>Training minutes</span><span>${weekMinutes.reduce((a,b)=>a+b,0)} min this week</span></div>
     </section>
+    <div class="section-title"><strong>Recent activity</strong><span>${recent.length ? 'Latest 5' : 'No sessions yet'}</span></div>
+    ${recent.length ? `<div class="exercise-list">${recent.map(item => `
+      <div class="exercise-card" style="grid-template-columns:1fr auto;padding:14px 16px">
+        <div><h3>${esc(item.day || item.plan || 'Workout')}</h3><small>${esc(item.date || '')} • ${Number(item.duration || 0)} min${Number(item.sets || 0) ? ` • ${Number(item.sets)} sets` : ''}</small></div>
+        <div class="index-badge">✓</div>
+      </div>`).join('')}</div>` : `<div class="empty-card"><div class="emoji">📈</div><p>Complete your first workout or cardio session and your progress will appear here automatically.</p></div>`}
   `, 'progress');
 }
-
 function restDayView() {
   const d = currentDay();
   return shell(`
@@ -466,7 +485,7 @@ function advanceAfterRest() {
 function finishStrengthWorkout() {
   const d = currentDay();
   const sets = totalSets(d);
-  state.history = [{date:new Date().toISOString().slice(0,10), plan:currentPlan().name, day:d.name, sets, duration:sessionMins()}, ...state.history].slice(0,30);
+  state.history = [{date:localDateKey(), plan:currentPlan().name, day:d.name, sets, duration:sessionMins()}, ...state.history].slice(0,30);
   state.restRunning = false;
   save();
   setRoute('complete');
@@ -474,7 +493,8 @@ function finishStrengthWorkout() {
 
 function finishCardio() {
   const d = currentDay();
-  state.history = [{date:new Date().toISOString().slice(0,10), plan:currentPlan().name, day:d.name, sets:0, duration:typeof state.cardioLeft === 'number' ? Math.round((d.cardio?.minutes||0)) : Math.max(1, Math.round(state.cardioStopwatch/60))}, ...state.history].slice(0,30);
+  const cardioDuration = typeof state.cardioLeft === 'number' ? Math.max(0, Math.round((((d.cardio?.minutes || 0) * 60) - state.cardioLeft) / 60)) : Math.max(0, Math.round(state.cardioStopwatch / 60));
+  state.history = [{date:localDateKey(), plan:currentPlan().name, day:d.name, sets:0, duration:cardioDuration}, ...state.history].slice(0,30);
   state.cardioRunning = false;
   state.cardioStopwatchRunning = false;
   save();
