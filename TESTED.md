@@ -16,3 +16,5 @@ Tested at iPhone-style 390 × 844 viewport.
 - Progress starts at 0 sessions / 0 minutes / 0 sets / 0 active days when no sessions exist.
 - Progress is populated from completed session history stored in localStorage.
 - JavaScript syntax checks pass for app.js and data.js.
+
+- Theme regression check: v8 neon-lime accents replaced with STRONGER orange while preserving the adaptive workout logic and layout.

@@ -40,3 +40,9 @@ Upload the contents of this folder to the root of your GitHub repo, then enable:
 **Settings -> Pages -> Deploy from a branch -> main -> /root**
 
 No build step is required.
+
+
+## v9 correction
+- Restored the original STRONGER Orange + Black identity.
+- Kept the new v8 layout, card structure, adaptive workout length selector, and higher-volume program logic.
+- Removed the neon-lime visual direction from the UI.
