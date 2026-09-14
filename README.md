@@ -1,36 +1,42 @@
-# STRONGER v7
+# STRONGER v8
 
-Premium iPhone-first fitness app prototype with improved UI/UX, richer workout visuals, a polished orange/black theme, real component-based screens, and the user's updated Ali weekly plan.
+Mobile-first fitness app prototype redesigned around a premium black + neon-lime visual system inspired by the supplied reference screenshot, while keeping STRONGER branding.
 
-## Features
-- Home screen with today's workout
-- Athlete plans screen
-- Ali weekly plan (Mon-Sun)
-- Workout day screens with exercise-specific photos
-- Exercise detail screens with muscles, how-to, and tips
-- Live workout screen
-- 90-second rest timer with +15 / pause / skip
-- Treadmill cardio and cycling screens
-- Workout complete screen
-- Progress screen
-- PWA-ready static site for GitHub Pages
+## What changed in v8
+- Whole app redesigned with image-first cards, black/charcoal surfaces, neon lime accents, rounded controls and compact iPhone-first navigation.
+- Workout length selector added: **45 / 60 / 70 / 90 / 120 minutes**.
+- Workout length changes actual workout volume, not just a label:
+  - shorter sessions use fewer exercises and slightly lower volume
+  - longer sessions add exercises
+  - 120-minute sessions also increase selected set counts
+- Ali cardio days include planned cardio inside the selected total session target.
+- Arnold Inspired expanded into a 6-day repeated split:
+  - Chest + Back A
+  - Shoulders + Arms A
+  - Legs + Abs A
+  - Chest + Back B
+  - Shoulders + Arms B
+  - Legs + Abs B
+  - Rest
+- Arnold 60-minute Chest + Back = 6 exercises.
+- Arnold 90-minute Chest + Back = 8 exercises.
+- Arnold 120-minute Chest + Back = 10 exercises with higher volume.
+- Real athlete photos remain configured on plan cards via Wikimedia Commons URLs with local fallbacks.
+- Exercise-specific images load from free-exercise-db with local fallbacks.
+- Progress is based only on completed user sessions stored locally in the browser.
+
+## Ali Plan
+- Monday: Back + Biceps
+- Tuesday: Chest + Triceps + 30 min Treadmill
+- Wednesday: Shoulders + Abs
+- Thursday: Legs + 25 min Treadmill
+- Friday: Light Cardio
+- Saturday: Rest Day
+- Sunday: Cycling
 
 ## GitHub Pages
-Upload the contents of this folder to the root of your repo, then enable:
+Upload the contents of this folder to the root of your GitHub repo, then enable:
 
-Settings -> Pages -> Deploy from a branch -> main -> /root
+**Settings -> Pages -> Deploy from a branch -> main -> /root**
 
-No build step is needed.
-
-
-## Update in v6
-- The Choose Your Plan cards now use real photos for Arnold, Ronnie, and Chris via Wikimedia Commons hosted images, with local fallbacks if loading fails.
-
-
-## v7 Progress update
-- Removed the unnecessary "Muscle build / Phone only / 90 sec rest" chips from the plan screen.
-- Progress metrics are now calculated only from the user's locally logged completed sessions.
-- Weekly activity chart uses actual logged training minutes from the last seven calendar days.
-- Recent activity is generated from the user's real workout/cardio history.
-- Removed fake percentage-growth and estimated-calorie numbers.
-- Cardio duration is saved from actual elapsed time instead of the planned duration.
+No build step is required.

@@ -1,23 +1,18 @@
-# TESTED
+# STRONGER v8 test notes
 
-- Static app renders from index.html with no build step.
-- Navigation works between Home, Plans, Plan, Day, Exercise, Active, Rest, Cardio, Complete, and Progress.
-- Ali plan updated to:
-  - Monday: Back + Biceps
-  - Tuesday: Chest + Triceps + 30 min Treadmill
-  - Wednesday: Shoulders + Abs
-  - Thursday: Legs + 25 min Treadmill
-  - Friday: Light Cardio
-  - Saturday: Rest Day
-  - Sunday: Cycling
-- Rest timer defaults to 90 seconds for all strength sets.
-- Rest timer supports +15 sec, pause/resume, and skip.
-- Cardio countdown and stopwatch flows implemented.
-- Uses remote exercise images from the free-exercise-db repo with local fallbacks.
+Tested at iPhone-style 390 × 844 viewport.
 
-- Plan cards updated to use real photos for Arnold, Ronnie, and Chris, with local image fallback on load error.
-
-- Removed plan chips: Muscle build / Phone only / 90 sec rest.
-- Progress screen no longer displays fabricated +% growth or calorie estimates.
-- Progress derives sessions, sets, training minutes, active days, 7-day chart, and recent activity from local user history.
-- Cardio history duration now records actual elapsed minutes.
+- Home screen renders with reference-inspired neon-lime visual style.
+- No horizontal overflow at tested viewport.
+- Arnold Inspired defaults to 90 min.
+- Arnold Chest + Back at 120 min generates 10 exercises.
+- Arnold Chest + Back at 60 min generates 6 exercises.
+- Arnold 90 min plan uses the repeated 6-day classic split structure.
+- Ali Tuesday at 60 min generates 4 strength exercises + 30 min treadmill inside the total time target.
+- Exercise detail screen opens correctly.
+- Live workout opens correctly.
+- Complete Set opens 90-second rest timer.
+- +15 sec changes 01:30 to 01:45.
+- Progress starts at 0 sessions / 0 minutes / 0 sets / 0 active days when no sessions exist.
+- Progress is populated from completed session history stored in localStorage.
+- JavaScript syntax checks pass for app.js and data.js.
